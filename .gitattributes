@@ -9,7 +9,9 @@
 *.css text
 
 # .sh files should have *nix endings, even on Windows
+# .ind files (test resources) should have *nix endings, even on Windows -- it's what they have in the web app
 *.sh text eol=lf
+*.ind text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 #*.sln text eol=crlf

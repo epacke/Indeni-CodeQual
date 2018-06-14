@@ -35,6 +35,16 @@ test('test comparison operators without spaces', function (t) {
     t.ok("x!~y".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x!~y");
     t.ok("x !~y".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x !~y");
     t.ok("x!~ y".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x!~ y");
+    
+    // regex first alternative -- most basic matches
+    t.ok("x==y".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x==y");
+    t.ok("x==".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x==");
+
+    // regex second alternative -- most basic matches
+    t.ok("x!".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "x!");
+
+    // regex third alternative -- most basic matches
+    t.ok("<x".match(valid.validationFuncs.comparisonOperatorNoSpace.pattern), "<x");
 
     
     // these test that we match nothing -- these are valid

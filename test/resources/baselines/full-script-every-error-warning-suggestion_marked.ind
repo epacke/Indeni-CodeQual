@@ -1,0 +1,612 @@
+columnVariableManipulation: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    <span class = "warning" title = "Changing column values (ie. $0, $1) could easily lead to unexpected behaviors.<br>It is highly recommended to instead save the column value to a variable and change that.">sub(/foo/, "bar", $1</span>)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+commaWithoutSpace: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount<span class = "error" title = "Commas signs should be followed by space to make the code more readable.<br>Exceptions to this are regexp and bash scripts.">,"</span>ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+comparisonOperatorNoSpace: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 <span class = "error" title = "The equals sign and other comparison operators should be followed by space to make the code more readable.<br>Exceptions to this are regexp and bash scripts.">~/</span>bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] <span class = "error" title = "The equals sign and other comparison operators should be followed by space to make the code more readable.<br>Exceptions to this are regexp and bash scripts.">=d</span>nsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+emptyBEGINSection: awk
+<span class = "warning" title = "Empty BEGIN sections serves no purpose and should be disposed of.">BEGIN {
+}</span>
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+emptyENDSection: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+<span class = "warning" title = "Empty END sections serves no purpose and should be disposed of.">END {
+}</span>
+
+
+genericSpaceBeforeAndAfter: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"<span class = "recommendation" title = "Space in certain places makes the code look nicer.">){</span>
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+ifContainsSingleEqualSign: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    <span class = "error" title = "Found an if statement that contains a single equals sign. Since this is most likely an accident (and it'd always return true) it could cause strange bugs in the code. Consider replacing with double equal signs.">if (dnsServer = "::")</span>{
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+invalidYAMLHeadingSpace: comments
+dns-servers-BAD:
+	why: |
+        DNS allows a device to resolve a name to an IP address.   
+    how: |
+<span class = "error" title = "Since indentation in YAML is 4 spaces having a number not divisible by 4 would cause an error in most cases.">          </span>Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+
+
+
+invalidYAMLHeadingSpace: meta
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+<span class = "error" title = "Since indentation in YAML is 4 spaces having a number not divisible by 4 would cause an error in most cases.">      </span>vendor: fortinet
+	os.name: FortiOS
+
+
+
+
+leadingTab: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+<span class = "error" title = "Tabs should not be used for indentation, please configure your editor to use space for indentation.">	</span>dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+leadingTab: comments
+dns-servers-BAD:
+<span class = "error" title = "Tabs should not be used for indentation, please configure your editor to use space for indentation.">	</span>why: |
+        DNS allows a device to resolve a name to an IP address.   
+    how: |
+          Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+
+
+
+leadingTab: meta
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+<span class = "error" title = "Tabs should not be used for indentation, please configure your editor to use space for indentation.">	</span>os.name: FortiOS
+
+
+
+
+lowerCaseDescription: meta
+name: get-system-dns
+description: <span class = "error" title = "In the english language, it's good practice to begin sentences with upper case.">display</span> the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+
+
+
+monitoringIntervalAbove60: meta
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: <span class = "error" title = "Due to a platform bug we don't support intervals over 1 hour.">61 minutes</span>
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+
+
+
+onlyWriteMetricOnce: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("<span class = "recommendation" title = "Each metric should only be written in one place. If the metric has been written more than once this test fails.">dns-servers</span>", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("<span class = "recommendation" title = "Each metric should only be written in one place. If the metric has been written more than once this test fails.">dns-servers</span>", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+resourceDataCheck: script
+#! META
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+<span class = "error" title = "Resource data has been used but no metrics that require it seem to exist.">includes_resource_data: true</span>
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+#! COMMENTS
+dns-servers-BAD:
+	why: |
+        DNS allows a device to resolve a name to an IP address.   
+    how: |
+          Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+#! REMOTE::SSH
+get system dns
+
+#! PARSER::AWK
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+spaceBeforeExample: awk
+BEGIN {
+}
+
+<span class = "warning" title = "Space before examples maybe looks nice, but it's far from exact, unless the input file actually has one. Consider removing this space unless yours does."># secondary           : 208.91.112.52</span>
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+tildeWithoutRegexpNotation: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ <span class = "warning" title = "Tilde signs should be followed by a regex enclosed in a traditional regex notation (ie. /regexp/).">"</span>bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+tildeWithoutSpace: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 <span class = "error" title = "Tilde signs should be followed by space to make the code more readable.<br>Exceptions to this are regexp.">~/</span>bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+trailingWhiteSpace: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer<span class = "error" title = "Trailing white space serves no purpose and should be removed.">    </span>
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+trailingWhiteSpace: comments
+dns-servers-BAD:
+	why: |
+        DNS allows a device to resolve a name to an IP address.<span class = "error" title = "Trailing white space serves no purpose and should be removed.">   </span>
+    how: |
+          Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+
+
+
+trailingWhiteSpace: meta
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring<span class = "error" title = "Trailing white space serves no purpose and should be removed.">     </span>
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+
+
+
+validScriptNamePrefix: meta
+name: <span class = "error" title = "Prefixes are important, not only to distinguish which type of device the script is executed on, but also to avoid script name collisions.">get-system-dns</span>
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+
+
+
+variableNamingConventions: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dn<span class = "warning" title = "Most people use snake case (ie. my_variable) in the repository. This is a suggestion for you to do the same.">sServer = </span>$NF
+    if (dn<span class = "warning" title = "Most people use snake case (ie. my_variable) in the repository. This is a suggestion for you to do the same.">sServer = </span>"::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+verifyAwkDocumentation: script
+#! META
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+#! COMMENTS
+<span class = "error" title = "This metric has not been documented in the COMMENTS section."><span class = "error" title = "This metric has not been documented in the COMMENTS section.">dns-servers</span></span>-BAD:
+	why: |
+        DNS allows a device to resolve a name to an IP address.   
+    how: |
+          Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+#! REMOTE::SSH
+get system dns
+
+#! PARSER::AWK
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+
+writeDebugExists: awk
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        <span class = "error" title = "writeDebug() (or debug()) are great for troubleshooting, but code with that function should never reach customers.">debug("who cares?")</span>
+    } else if ($2 ~ "bonkers") {
+        <span class = "error" title = "writeDebug() (or debug()) are great for troubleshooting, but code with that function should never reach customers.">writeDebug("huh?")</span>
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}
+
+

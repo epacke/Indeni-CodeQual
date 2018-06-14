@@ -1,6 +1,7 @@
+'use strict';
+
 // Bind the functions that controls that the tests should be executed upon keyup
 // in the script text area
-
 $(document).ready( function(){
     $("textarea#script-textarea").on("keyup onpaste", parseScriptSections);
     $("textarea#script-textarea").trigger("keyup");
@@ -17,16 +18,16 @@ $(document).ready( function(){
 // Add a prototype to each codeValidation function
 // that checks if the code has changed or not.
 // If it has changed it means that the code is non-compliant.
-for(f in codeValidationFunctions){
-    codeValidationFunctions[f].isCompliant = function (line){
-        return line === this.mark(line);
+for(const f in codeValidationFunctions){
+    codeValidationFunctions[f].isCompliant = function (line, getSections){
+        return line === this.mark(line, getSections);
     }
 }
 
 // Each time the user is updating the source text area the checks must be executed again
 // This function resets all the necessary values
 function resetApplication(){
-    for(f in codeValidationFunctions){
+    for(const f in codeValidationFunctions){
         codeValidationFunctions[f].compliant = true;
         codeValidationFunctions[f].executed = false;
     }
@@ -44,9 +45,9 @@ function updateTestResultButtons() {
     // Check each function to see if it found a non-compliance in the code
     // Update the test results accordingly
 
-    for(name in codeValidationFunctions){
+    for(const name in codeValidationFunctions){
 
-        f = codeValidationFunctions[name];
+        const f = codeValidationFunctions[name];
 
         if(f.compliant && f.executed){    
             $("div#compliant").append("<button title = \"" + f.reason + "\" class=\"compliant\" id=\"" + name + "\">" + f.testName + "</button>");
@@ -71,40 +72,12 @@ function updateTestResultButtons() {
 function executeAndMark (testFunctions){
 
     // Get the source script pasted by the user        
-    var result = $("textarea#script-textarea").val();
+    var fullScript = $("textarea#script-textarea").val();
 
-    testFunctions.map(function(f){
-
-        // For each executed section, mark the non-compliant content by replacing 
-        // it with a span that has a non-compliance css class
-        
-        // Let's say we have a function that is applied to awk and yaml, in that case
-        // the first round would contain type == "awk". 
-        // Next step would be to verify that there actually is a section named "awk".
-        // If there is, the content of the section will be replaced by the mark function.
-
-        f.applyToSections.map(function(type){
-
-            // Get the content of the sections in the script ("meta", "comments", "awk")
-            var sections = getScriptSections(result);
-
-            for(var s in sections){
-
-                if(sections[s].apply.indexOf(type) !== -1){
-
-                    // Verify that the parsed sections contains the type
-                    var sectionContent = sections[s].content;
-                    result = result.replace(sectionContent, f.mark(sectionContent));
-
-                }
-            }
-
-        });
-
-    })
+    const updatedContent = marker(testFunctions, fullScript, getScriptSections);
 
     // Update the content of the result window
-    $("pre#result-content").html(result);
+    $("pre#result-content").html(updatedContent);
 
     // Re-create the tippy tool tips
     tippy("span.error, span.warning, button", {
@@ -120,10 +93,8 @@ function setActiveTest (b){
     b.attr("active", "true");
 }
 
-
 // Executes the test associated with a button and highlights the results in the results div
 // Used as a an onClick event below
-
 function testButtonClicked(){
 
     var button = $(this);
@@ -150,7 +121,6 @@ function markAllNonCompliances(){
     }
 
     executeAndMark(functions);
-
 }
 
 
@@ -188,11 +158,11 @@ function parseScriptSections(){
 
 function validateSections(sections){
 
-    for (section in sections){
+    for (const section in sections){
         
         // section could be ie. "awk" here
         // sectionContent is the content of the awk parser
-        sectionContent = sections[section].content;
+        var sectionContent = sections[section].content;
         
         // Loop through the codeValidationFunctions and run each one that
         // has ie. "awk" in the applyToSections array
@@ -200,9 +170,9 @@ function validateSections(sections){
         if(sectionContent !== ""){
             sections[section].apply.map(function(type){
 
-                for(name in codeValidationFunctions){
+                for(const name in codeValidationFunctions){
 
-                    f = codeValidationFunctions[name];
+                    const f = codeValidationFunctions[name];
 
                     if(f.applyToSections.indexOf(type) !== -1){
 
@@ -215,7 +185,7 @@ function validateSections(sections){
                             // Check if the function found something already
                             // If not, run the tests
                             if (f.compliant){
-                                f.compliant = f.isCompliant(sectionContent);
+                                f.compliant = f.isCompliant(sectionContent, getScriptSections);
                             }
 
                         } catch (e) {

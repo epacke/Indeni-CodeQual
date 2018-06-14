@@ -1,0 +1,48 @@
+#! META
+name: get-system-dns
+description: display the configured DNS servers in the Indeni UI
+type: monitoring     
+includes_resource_data: true
+monitoring_interval: 61 minutes
+requires:
+      vendor: fortinet
+	os.name: FortiOS
+
+#! COMMENTS
+dns-servers-BAD:
+	why: |
+        DNS allows a device to resolve a name to an IP address.   
+    how: |
+          Using the built-in "get system dns" command.
+    without-indeni: |
+        An administrator could login and manually run the command.
+    can-with-snmp: true
+    can-with-syslog: false
+
+#! REMOTE::SSH
+get system dns
+
+#! PARSER::AWK
+BEGIN {
+}
+
+# secondary           : 208.91.112.52
+/^(primary|secondary|ip6-primary|ip6-secondary)/ {
+    sub(/foo/, "bar", $1)
+    if ($1 ~/bad idea/) {
+        debug("who cares?")
+    } else if ($2 ~ "bonkers") {
+        writeDebug("huh?")
+    }
+	dnsServer = $NF
+    if (dnsServer = "::"){
+        dns_server_count++
+        dns_servers[dnsServerCount,"ipaddress"] =dnsServer    
+    }
+
+    writeComplexMetricObjectArrayWithLiveConfig("dns-servers", null, dns_servers, "DNS Servers")
+    writeDoubleMetric("dns-servers", null, "gauge", 0, 1)
+}
+
+END {
+}

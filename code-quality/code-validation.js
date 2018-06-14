@@ -1,3 +1,4 @@
+'use strict';
 
 // Adding functions:
 // Each function must have the following properties.
@@ -39,7 +40,6 @@ var codeValidationFunctions = {
                 if(indeniScriptNamePrefixes.indexOf(prefix) === -1){
                     var re = new RegExp(scriptName);
                     content = content.replace(re, getSpan(this.severity, this.reason, "$&"));
-                    console.log(content)
                 }
             }
 
@@ -135,12 +135,12 @@ var codeValidationFunctions = {
         //writeDebug("this is a debug")
 
         this.testName = "writeDebug()";
-        this.reason = "writeDebug() is great for troubleshooting, but code with that function should never reach customers.";
+        this.reason = "writeDebug() (or debug()) are great for troubleshooting, but code with that function should never reach customers.";
         this.severity = "error";
         this.applyToSections = ["awk"];
 
         this.mark = function(content){
-            return content.replace(/writeDebug\(.+\)/gm, getSpan(this.severity, this.reason, "$&"));
+            return content.replace(/writeDebug\(.+\)|debug\(.+\)/gm, getSpan(this.severity, this.reason, "$&"));
         }
     },
     "ifContainsSingleEqualSign": new function (){
@@ -341,9 +341,9 @@ var codeValidationFunctions = {
         this.severity = "error";
         this.applyToSections = ["script"];
 
-        this.mark = function(content){
+        this.mark = function(content, getSections){
 
-            var documentedMetrics = getDocumentedMetrics(content);
+            var documentedMetrics = getDocumentedMetrics(content, getSections);
             var matches = content.match(/write(Double|Complex)[^\(]+\(\"[^\"]+|im\.name\":\s*_constant:\s\"[^\"]+/gm) || [];
             var usedMetrics = [];
 
@@ -418,9 +418,9 @@ var codeValidationFunctions = {
         this.severity = "error";
         this.applyToSections = ["script"];
 
-        this.mark = function(content){
+        this.mark = function(content, getSections){
 
-            var sections = getScriptSections(content);
+            var sections = getSections(content);
 
             if (sections.hasOwnProperty("meta")){
 
@@ -430,7 +430,7 @@ var codeValidationFunctions = {
 
                 if (parserData !== undefined){
 
-                    var parserContent = parserData.content;
+                    //var parserContent = parserData.content;
 
                     var matches = content.match(/write(Double|Complex)[^\(]+\(\"[^\"]+|im\.name\":\s*_constant:\s\"[^\"]+/gm) || [];
                     var usedMetrics = [];
@@ -460,11 +460,11 @@ var codeValidationFunctions = {
             return content
         }
     }
-}
+};
 
-function getDocumentedMetrics(content){
+function getDocumentedMetrics(content, getSections){
 
-    var scriptSections = getScriptSections(content);
+    var scriptSections = getSections(content);
     var documentedMetrics = [];
 
     if (scriptSections.hasOwnProperty("comments")) {
@@ -486,7 +486,9 @@ function getSpan(severity, reason, content){
     return "<span class = \"" + severity + "\" title = \"" + reason + "\">" + content + "</span>"
 }
 
-// exports code validation functions if we're using node (for testing)
+// These lines are to support the unit test framework. That framework uses node.js, which uses "requires" to import
+// code. Since we're not using node for the actual web code, we need to protect this use of "exports", otherwise
+// we'll get an error on page load. Take a look at the test cases in /test to see how we use this.
 if (typeof(exports) !== 'undefined' && exports !== null)
 {
     exports.validationFuncs = codeValidationFunctions;
